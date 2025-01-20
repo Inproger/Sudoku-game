@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Game</title>
+    <style>
+        /* Basit bir Sudoku tahtası tasarımı */
+        #board {
+            display: grid;
+            grid-template-columns: repeat(9, 50px);
+            grid-gap: 5px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 20px;
+            border: 1px solid #ddd;
+        }
+        .cell input {
+            width: 100%;
+            height: 100%;
+            font-size: 18px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sudoku</h1>
+    <div id="board"></div>
+    <button onclick="checkSolution()">Çözümü Kontrol Et</button>
+
+    <script>
+        // Basit bir Sudoku tablosu (örnek)
+        let sudokuBoard = [
+            [5, 3, 0, 0, 7, 0, 0, 0, 0],
+            [6, 0, 0, 1, 9, 5, 0, 0, 0],
+            [0, 9, 8, 0, 0, 0, 0, 6, 0],
+            [8, 0, 0, 0, 6, 0, 0, 0, 3],
+            [4, 0, 0, 8, 0, 3, 0, 0, 1],
+            [7, 0, 0, 0, 2, 0, 0, 0, 6],
+            [0, 6, 0, 0, 0, 0, 2, 8, 0],
+            [0, 0, 0, 4, 1, 9, 0, 0, 5],
+            [0, 0, 0, 0, 8, 0, 0, 7, 9]
+        ];
+
+        // Tahtayı oluştur
+        function createBoard() {
+            const boardElement = document.getElementById('board');
+            boardElement.innerHTML = ''; // Tahtayı temizle
+
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    if (sudokuBoard[i][j] !== 0) {
+                        cell.innerText = sudokuBoard[i][j]; // Sayılar sabit olan hücrelerde gösterilir
+                    } else {
+                        const input = document.createElement('input');
+                        input.type = 'number';
+                        input.min = '1';
+                        input.max = '9';
+                        input.id = `cell-${i}-${j}`;
+                        cell.appendChild(input);
+                    }
+                    boardElement.appendChild(cell);
+                }
+            }
+        }
+
+        // Çözümü kontrol et
+        function checkSolution() {
+            let isCorrect = true;
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    const input = document.getElementById(`cell-${i}-${j}`);
+                    if (input) {
+                        const value = parseInt(input.value, 10);
+                        if (value !== sudokuBoard[i][j]) {
+                            isCorrect = false;
+                            input.style.backgroundColor = 'red'; // Hatalı giriş
+                        } else {
+                            input.style.backgroundColor = ''; // Doğru giriş
+                        }
+                    }
+                }
+            }
+            if (isCorrect) {
+                alert('Tebrikler, Sudoku çözüldü!');
+            } else {
+                alert('Çözüm hatalı!');
+            }
+        }
+
+        // Sayfa yüklendiğinde tahtayı oluştur
+        window.onload = createBoard;
+    </script>
+</body>
+</html>
